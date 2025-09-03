@@ -1,3 +1,14 @@
+/**
+ * BLOG API MAIN ENDPOINT
+ * Status: ✅ FUNCIONANDO (Fase 1 concluída)
+ * 
+ * GET /api/blog - Lista todos os posts publicados do Supabase
+ * POST /api/blog - Cria novo post (requer autenticação)
+ * 
+ * Integração: Supabase posts table
+ * Última atualização: 03/09/2025
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getPublishedPosts, createPost } from '@/lib/blog.utils';
 import { CreatePostData } from '@/lib/blog.types';
@@ -5,7 +16,7 @@ import { checkAuth, unauthorizedResponse } from '@/lib/auth.utils';
 
 export async function GET() {
   try {
-    const posts = getPublishedPosts();
+    const posts = await getPublishedPosts();
     return NextResponse.json(posts);
   } catch (error) {
     console.error('Erro ao buscar posts:', error);

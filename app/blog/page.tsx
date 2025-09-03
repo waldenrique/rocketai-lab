@@ -1,15 +1,33 @@
+/**
+ * BLOG PAGE COMPONENT
+ * Status: ✅ FUNCIONANDO (Fase 1 concluída)
+ * 
+ * Funcionalidades implementadas:
+ * - Lista posts do Supabase via API
+ * - Paginação (6 posts por página)
+ * - Design responsivo
+ * - Links funcionais para posts individuais
+ * 
+ * URL: http://localhost:3000/blog
+ * Última atualização: 03/09/2025
+ */
+
 "use client";
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, Tag, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { BlogPost } from '@/lib/blog.types';
 
+const POSTS_PER_PAGE = 6;
+
 export default function BlogPage() {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,7 +38,7 @@ export default function BlogPage() {
     try {
       const response = await fetch('/api/blog');
       const data = await response.json();
-      setPosts(data);
+      setAllPosts(data);
     } catch (error) {
       console.error('Erro ao carregar posts:', error);
     } finally {
@@ -34,6 +52,49 @@ export default function BlogPage() {
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  // Calcular posts para a página atual
+  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+  const endIndex = startIndex + POSTS_PER_PAGE;
+  const currentPosts = allPosts.slice(startIndex, endIndex);
+
+  // Funções de navegação
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
+  };
+
+  // Gerar números das páginas para mostrar
+  const getPageNumbers = () => {
+    const pages = [];
+    const showPages = 5; // Máximo de páginas para mostrar
+    let startPage = Math.max(1, currentPage - Math.floor(showPages / 2));
+    let endPage = Math.min(totalPages, startPage + showPages - 1);
+
+    // Ajustar startPage se estivermos perto do final
+    if (endPage - startPage + 1 < showPages) {
+      startPage = Math.max(1, endPage - showPages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
   };
 
   if (loading) {
@@ -84,7 +145,7 @@ export default function BlogPage() {
       {/* Posts Grid */}
       <section className="py-16">
         <div className="mx-auto max-w-7xl px-4">
-          {posts.length === 0 ? (
+          {allPosts.length === 0 ? (
             <div className="text-center py-20">
               <h2 className="text-2xl font-semibold text-white mb-4">
                 Nenhum post publicado ainda
@@ -100,67 +161,125 @@ export default function BlogPage() {
               </Link>
             </div>
           ) : (
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post, index) => (
-                <motion.div
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <Link href={`/blog/${post.slug}`}>
-                    <Card className="group border-slate-800/60 bg-slate-900/40 hover:bg-slate-900/60 transition-all duration-300 overflow-hidden">
-                      {post.image && (
-                        <div className="relative h-48 overflow-hidden">
-                          <Image
-                            src={post.image}
-                            alt={post.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                      )}
-                      
-                      <CardHeader>
-                        <div className="flex items-center gap-4 text-sm text-slate-400 mb-3">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="size-4" />
-                            {formatDate(post.publishedAt)}
+            <>
+              {/* Posts da página atual */}
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {currentPosts.map((post: BlogPost, index: number) => (
+                  <motion.div
+                    key={post.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <Link href={`/blog/${post.slug}`}>
+                      <Card className="group border-slate-800/60 bg-slate-900/40 hover:bg-slate-900/60 transition-all duration-300 overflow-hidden h-full">
+                        {post.image && (
+                          <div className="relative h-48 overflow-hidden">
+                            <Image
+                              src={post.image}
+                              alt={post.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="size-4" />
-                            {post.readingTime} min
-                          </div>
-                        </div>
+                        )}
                         
-                        <CardTitle className="text-white group-hover:text-indigo-300 transition-colors">
-                          {post.title}
-                        </CardTitle>
-                      </CardHeader>
-                      
-                      <CardContent>
-                        <p className="text-slate-300 mb-4 line-clamp-3">
-                          {post.excerpt}
-                        </p>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Tag className="size-4 text-slate-400" />
-                            <span className="text-sm text-slate-400">
-                              {post.category}
-                            </span>
+                        <CardHeader>
+                          <div className="flex items-center gap-4 text-sm text-slate-400 mb-3">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="size-4" />
+                              {formatDate(post.publishedAt)}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="size-4" />
+                              {post.readingTime} min
+                            </div>
                           </div>
                           
-                          <div className="text-indigo-300 group-hover:text-indigo-200 transition-colors">
-                            <ArrowRight className="size-4" />
+                          <CardTitle className="text-white group-hover:text-indigo-300 transition-colors line-clamp-2">
+                            {post.title}
+                          </CardTitle>
+                        </CardHeader>
+                        
+                        <CardContent>
+                          <p className="text-slate-300 mb-4 line-clamp-3">
+                            {post.excerpt}
+                          </p>
+                          
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Tag className="size-4 text-slate-400" />
+                              <span className="text-sm text-slate-400">
+                                {post.category}
+                              </span>
+                            </div>
+                            
+                            <div className="text-indigo-300 group-hover:text-indigo-200 transition-colors">
+                              <ArrowRight className="size-4" />
+                            </div>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Paginação */}
+              {totalPages > 1 && (
+                <div className="mt-16 flex justify-center items-center gap-2">
+                  {/* Botão Anterior */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={prevPage}
+                    disabled={currentPage === 1}
+                    className="border-slate-700 bg-slate-800/60 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ChevronLeft className="size-4 mr-1" />
+                    Anterior
+                  </Button>
+
+                  {/* Números das páginas */}
+                  <div className="flex items-center gap-1 mx-4">
+                    {getPageNumbers().map((pageNum) => (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => goToPage(pageNum)}
+                        className={
+                          currentPage === pageNum
+                            ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                            : "border-slate-700 bg-slate-800/60 text-slate-300 hover:bg-slate-700 hover:text-white"
+                        }
+                      >
+                        {pageNum}
+                      </Button>
+                    ))}
+                  </div>
+
+                  {/* Botão Próximo */}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={nextPage}
+                    disabled={currentPage === totalPages}
+                    className="border-slate-700 bg-slate-800/60 text-slate-300 hover:bg-slate-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Próximo
+                    <ChevronRight className="size-4 ml-1" />
+                  </Button>
+                </div>
+              )}
+
+              {/* Informações da paginação */}
+              {totalPages > 1 && (
+                <div className="mt-8 text-center text-slate-400 text-sm">
+                  Mostrando {startIndex + 1}-{Math.min(endIndex, allPosts.length)} de {allPosts.length} posts
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>

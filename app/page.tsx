@@ -22,7 +22,8 @@ const nav = [
   { label: "Processo", href: "#processo" },
   { label: "Planos", href: "#planos" },
   { label: "Cases", href: "#cases" },
-  { label: "Blog", href: "#blog" },
+  { label: "Produtos", href: "/produtos" },
+  { label: "Blog", href: "/blog" },
   { label: "Contato", href: "#contato" },
 ];
 
@@ -199,6 +200,9 @@ export default function RocketLabLanding() {
                 <a href="#cases" className="text-slate-300 hover:text-white transition-colors">
                   Cases
                 </a>
+                <Link href="/produtos" className="text-slate-300 hover:text-white transition-colors">
+                  Produtos
+                </Link>
                 <Link href="/blog" className="text-slate-300 hover:text-white transition-colors">
                   Blog
                 </Link>

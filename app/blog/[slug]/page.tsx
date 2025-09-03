@@ -1,3 +1,21 @@
+/**
+ * INDIVIDUAL BLOG POST PAGE
+ * Status: ✅ FUNCIONANDO (Fase 1 concluída)
+ * 
+ * Funcionalidades:
+ * - Exibe post completo por slug
+ * - Navegação anterior/próximo
+ * - SEO otimizado
+ * - Design responsivo
+ * 
+ * URLs funcionais:
+ * - /blog/por-que-sua-empresa-precisa-de-presenca-digital-em-2025
+ * - /blog/automacao-de-marketing-como-acelerar-vendas
+ * - /blog/redes-sociais-estrategias-que-geram-resultados
+ * 
+ * Última atualização: 03/09/2025
+ */
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -5,17 +23,20 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, ArrowLeft, Share2, Tag } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, Share2, Tag, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { BlogPost } from '@/lib/blog.types';
 
 export default function BlogPostPage() {
   const { slug } = useParams();
   const [post, setPost] = useState<BlogPost | null>(null);
+  const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (slug) {
       fetchPost(slug as string);
+      fetchAllPosts();
     }
   }, [slug]);
 
@@ -36,6 +57,16 @@ export default function BlogPostPage() {
     }
   };
 
+  const fetchAllPosts = async () => {
+    try {
+      const response = await fetch('/api/blog');
+      const data = await response.json();
+      setAllPosts(data);
+    } catch (error) {
+      console.error('Erro ao carregar posts:', error);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR', {
       year: 'numeric',
@@ -43,6 +74,24 @@ export default function BlogPostPage() {
       day: 'numeric'
     });
   };
+
+  // Encontrar posts anterior e próximo
+  const getCurrentPostIndex = () => {
+    return allPosts.findIndex(p => p.slug === slug);
+  };
+
+  const getPreviousPost = () => {
+    const currentIndex = getCurrentPostIndex();
+    return currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+  };
+
+  const getNextPost = () => {
+    const currentIndex = getCurrentPostIndex();
+    return currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
+  };
+
+  const previousPost = getPreviousPost();
+  const nextPost = getNextPost();
 
   if (loading) {
     return (
@@ -87,16 +136,18 @@ export default function BlogPostPage() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <Link 
-                href="/" 
-                className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
-              >
-                ← Início
-              </Link>
-              <Link 
                 href="/blog" 
-                className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 px-3 py-2 text-slate-300 hover:text-white hover:bg-slate-800/60 rounded-lg transition-all"
               >
-                ← Blog
+                <ArrowLeft className="size-4" />
+                Voltar ao Blog
+              </Link>
+              <span className="text-slate-600">|</span>
+              <Link 
+                href="/" 
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                Início
               </Link>
             </div>
             
@@ -207,6 +258,72 @@ export default function BlogPostPage() {
           </motion.div>
         </div>
       </article>
+
+      {/* Navigation between posts */}
+      {(previousPost || nextPost) && (
+        <section className="border-t border-slate-800/60 py-12">
+          <div className="mx-auto max-w-4xl px-4">
+            <div className="grid gap-6 md:grid-cols-2">
+              {/* Post Anterior */}
+              <div className="flex justify-start">
+                {previousPost ? (
+                  <Link 
+                    href={`/blog/${previousPost.slug}`}
+                    className="group flex items-center gap-4 p-4 rounded-xl bg-slate-900/40 border border-slate-800/60 hover:bg-slate-900/60 transition-all max-w-sm"
+                  >
+                    <div className="flex-shrink-0">
+                      <ChevronLeft className="size-6 text-slate-400 group-hover:text-white transition-colors" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm text-slate-400 mb-1">Post anterior</p>
+                      <h3 className="text-white font-semibold group-hover:text-indigo-300 transition-colors line-clamp-2">
+                        {previousPost.title}
+                      </h3>
+                    </div>
+                  </Link>
+                ) : (
+                  <div></div>
+                )}
+              </div>
+
+              {/* Próximo Post */}
+              <div className="flex justify-end">
+                {nextPost ? (
+                  <Link 
+                    href={`/blog/${nextPost.slug}`}
+                    className="group flex items-center gap-4 p-4 rounded-xl bg-slate-900/40 border border-slate-800/60 hover:bg-slate-900/60 transition-all max-w-sm"
+                  >
+                    <div className="min-w-0 text-right">
+                      <p className="text-sm text-slate-400 mb-1">Próximo post</p>
+                      <h3 className="text-white font-semibold group-hover:text-indigo-300 transition-colors line-clamp-2">
+                        {nextPost.title}
+                      </h3>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <ChevronRight className="size-6 text-slate-400 group-hover:text-white transition-colors" />
+                    </div>
+                  </Link>
+                ) : (
+                  <div></div>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Back to Blog Button */}
+      <section className="border-t border-slate-800/60 py-8">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <Link 
+            href="/blog"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800/60 text-slate-300 rounded-lg hover:bg-slate-700 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="size-4" />
+            Ver todos os posts
+          </Link>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="border-t border-slate-800/60 py-16">

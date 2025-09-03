@@ -1,3 +1,19 @@
+/**
+ * BLOG API INDIVIDUAL POST ENDPOINT
+ * Status: ✅ FUNCIONANDO (Fase 1 concluída)
+ * 
+ * GET /api/blog/[slug] - Busca post por slug
+ * PUT /api/blog/[id] - Atualiza post (admin)
+ * DELETE /api/blog/[id] - Deleta post (admin)
+ * 
+ * Funciona com slugs corretos:
+ * - por-que-sua-empresa-precisa-de-presenca-digital-em-2025
+ * - automacao-de-marketing-como-acelerar-vendas
+ * - redes-sociais-estrategias-que-geram-resultados
+ * 
+ * Última atualização: 03/09/2025 - Funções async corrigidas
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getPostBySlug, updatePost, deletePost, getAllPosts } from '@/lib/blog.utils';
 import { CreatePostData } from '@/lib/blog.types';
@@ -15,12 +31,12 @@ export async function GET(
     const { id } = params;
     
     // Se for um slug, buscar por slug
-    const post = getPostBySlug(id);
+    const post = await getPostBySlug(id);
     
     if (!post) {
       // Se não encontrou por slug, tentar buscar por ID
-      const allPosts = getAllPosts();
-      const postById = allPosts.find(p => p.id === id);
+      const allPosts = await getAllPosts();
+      const postById = allPosts.find((p: any) => p.id === id);
       
       if (!postById) {
         return NextResponse.json(
@@ -55,7 +71,7 @@ export async function PUT(
     const { id } = params;
     const data: Partial<CreatePostData> = await request.json();
     
-    const updatedPost = updatePost(id, data);
+    const updatedPost = await updatePost(id, data);
     
     if (!updatedPost) {
       return NextResponse.json(
@@ -86,7 +102,7 @@ export async function DELETE(
   try {
     const { id } = params;
     
-    const success = deletePost(id);
+    const success = await deletePost(id);
     
     if (!success) {
       return NextResponse.json(
