@@ -109,8 +109,6 @@ const posts = [
 ];
 
 export default function RocketLabLanding() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <StarsBg />
@@ -345,17 +343,14 @@ export default function RocketLabLanding() {
             <Card className="border-slate-800/60 bg-slate-900/40">
               <CardContent className="p-6">
                 <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    alert("Mensagem enviada! Em breve entraremos em contato.");
-                  }}
+                  action="https://formspree.io/f/xnnqgjqv"
+                  method="POST"
                   className="space-y-4"
                 >
                   <div>
                     <label className="mb-1 block text-sm">Nome</label>
                     <Input
-                      value={form.name}
-                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      name="name"
                       placeholder="Seu nome"
                       className="bg-slate-950 border-slate-800"
                       required
@@ -365,8 +360,7 @@ export default function RocketLabLanding() {
                     <label className="mb-1 block text-sm">Email</label>
                     <Input
                       type="email"
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      name="email"
                       placeholder="seu@email.com"
                       className="bg-slate-950 border-slate-800"
                       required
@@ -375,8 +369,7 @@ export default function RocketLabLanding() {
                   <div>
                     <label className="mb-1 block text-sm">Mensagem</label>
                     <Textarea
-                      value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
+                      name="message"
                       placeholder="Fale um pouco do seu projeto"
                       className="bg-slate-950 border-slate-800 min-h-28"
                       required
