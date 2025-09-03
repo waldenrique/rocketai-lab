@@ -56,4 +56,17 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* Custom input styles for better visibility */
+  input[type="text"], 
+  input[type="email"], 
+  textarea {
+    color: white !important;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    color: rgb(148 163 184) !important; /* slate-400 */
+    opacity: 0.8;
+  }
 }
