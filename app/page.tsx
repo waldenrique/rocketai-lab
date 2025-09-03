@@ -343,7 +343,7 @@ export default function RocketLabLanding() {
             <Card className="border-slate-800/60 bg-slate-900/40">
               <CardContent className="p-6">
                 <form
-                  action="https://formspree.io/f/xnnqgjqv"
+                  action="https://formspree.io/f/xpwjyvnd"
                   method="POST"
                   className="space-y-4"
                 >
