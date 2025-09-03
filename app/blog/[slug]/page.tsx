@@ -181,7 +181,7 @@ export default function BlogPostPage() {
                       alert('Link copiado para a área de transferência!');
                     }
                   }}
-                  className="flex items-center gap-2 px-4 py-2 bg-slate-800/60 text-slate-300 rounded-lg hover:bg-slate-800 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-800/60 text-slate-300 rounded-lg hover:bg-slate-700 hover:text-white transition-colors"
                 >
                   <Share2 className="size-4" />
                   Compartilhar

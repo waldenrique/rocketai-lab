@@ -137,7 +137,7 @@ export default function AdminPage() {
             <Button
               onClick={resetForm}
               variant="outline"
-              className="border-slate-700"
+              className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white"
             >
               <ArrowLeft className="size-4 mr-2" />
               Voltar
@@ -298,7 +298,7 @@ export default function AdminPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-indigo-600 hover:bg-indigo-700"
+                className="bg-indigo-600 hover:bg-indigo-700 text-white"
               >
                 <Save className="size-4 mr-2" />
                 {loading ? 'Salvando...' : (editingPost ? 'Atualizar Post' : 'Criar Post')}
@@ -308,7 +308,7 @@ export default function AdminPage() {
                 type="button"
                 variant="outline"
                 onClick={resetForm}
-                className="border-slate-700"
+                className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white"
               >
                 Cancelar
               </Button>
@@ -335,14 +335,14 @@ export default function AdminPage() {
           <div className="flex gap-4">
             <Button
               onClick={() => setIsCreating(true)}
-              className="bg-indigo-600 hover:bg-indigo-700"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
             >
               <Plus className="size-4 mr-2" />
               Novo Post
             </Button>
             
             <Link href="/blog">
-              <Button variant="outline" className="border-slate-700">
+              <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white">
                 <Eye className="size-4 mr-2" />
                 Ver Blog
               </Button>
@@ -363,7 +363,7 @@ export default function AdminPage() {
                 </p>
                 <Button
                   onClick={() => setIsCreating(true)}
-                  className="bg-indigo-600 hover:bg-indigo-700"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
                   <Plus className="size-4 mr-2" />
                   Criar Primeiro Post
@@ -396,7 +396,7 @@ export default function AdminPage() {
                         onClick={() => startEditing(post)}
                         variant="outline"
                         size="sm"
-                        className="border-slate-700"
+                        className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white"
                       >
                         <Edit className="size-4" />
                       </Button>
@@ -405,7 +405,7 @@ export default function AdminPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-slate-700"
+                          className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white"
                         >
                           <Eye className="size-4" />
                         </Button>
@@ -415,7 +415,7 @@ export default function AdminPage() {
                         onClick={() => handleDelete(post.id)}
                         variant="outline"
                         size="sm"
-                        className="border-red-600 text-red-400 hover:bg-red-600/10"
+                        className="border-red-600 text-red-400 hover:bg-red-600/20 hover:text-red-300"
                       >
                         <Trash2 className="size-4" />
                       </Button>
