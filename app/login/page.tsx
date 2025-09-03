@@ -24,26 +24,35 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    // Simular verificação de login com melhor segurança
-    setTimeout(() => {
-      if (credentials.username === 'waldenrique' && credentials.password === 'rocketai85') {
-        // Gerar token de autenticação
-        const timestamp = Date.now().toString();
-        const payload = `${credentials.username}:${timestamp}`;
-        const token = btoa(payload);
-        
-        // Salvar sessão com token
+    try {
+      // Fazer requisição para API de autenticação
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Salvar sessão com token retornado pela API
         localStorage.setItem('adminAuth', 'true');
         localStorage.setItem('adminUser', credentials.username);
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('loginTime', timestamp);
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('loginTime', data.loginTime);
         
         router.push('/admin');
       } else {
-        setError('Usuário ou senha incorretos');
+        setError(data.error || 'Erro ao fazer login');
       }
+    } catch (error) {
+      console.error('Erro no login:', error);
+      setError('Erro de conexão');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (

@@ -19,10 +19,11 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
       const token = localStorage.getItem('authToken');
       
       if (authStatus === 'true' && loginTime && token) {
-        // Verificar se o token não expirou (24 horas)
+        // Verificar se o token não expirou (usar duração configurada)
         const now = Date.now();
         const tokenTime = parseInt(loginTime);
-        const hoursInMs = 24 * 60 * 60 * 1000;
+        const durationHours = 24; // Fallback para 24h no client-side
+        const hoursInMs = durationHours * 60 * 60 * 1000;
         
         if (now - tokenTime > hoursInMs) {
           // Token expirado, fazer logout

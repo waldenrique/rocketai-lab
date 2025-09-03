@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+import { config } from './config';
 
 // Função para verificar autenticação via header
 export function checkAuth(request: NextRequest): boolean {
@@ -17,14 +18,14 @@ export function checkAuth(request: NextRequest): boolean {
     const decoded = atob(token);
     const [username, timestamp] = decoded.split(':');
     
-    if (username !== 'waldenrique') {
+    if (username !== config.admin.username) {
       return false;
     }
     
-    // Verifica se o token não expirou (24 horas)
+    // Verifica se o token não expirou
     const now = Date.now();
     const tokenTime = parseInt(timestamp);
-    const hoursInMs = 24 * 60 * 60 * 1000;
+    const hoursInMs = config.session.durationHours * 60 * 60 * 1000;
     
     if (now - tokenTime > hoursInMs) {
       return false;
