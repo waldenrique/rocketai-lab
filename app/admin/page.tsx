@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { BlogPost, CreatePostData } from '@/lib/blog.types';
 import AuthWrapper from '@/components/AuthWrapper';
+import { authenticatedFetch, logout } from '@/lib/auth.client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -45,8 +46,7 @@ export default function AdminPage() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('adminAuth');
-    localStorage.removeItem('adminUser');
+    logout();
     router.push('/');
   };
 
@@ -68,11 +68,8 @@ export default function AdminPage() {
       const url = editingPost ? `/api/blog/${editingPost.id}` : '/api/blog';
       const method = editingPost ? 'PUT' : 'POST';
 
-      const response = await fetch(url, {
+      const response = await authenticatedFetch(url, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(formData),
       });
 
@@ -80,6 +77,9 @@ export default function AdminPage() {
         alert(editingPost ? 'Post atualizado!' : 'Post criado!');
         resetForm();
         loadPosts();
+      } else if (response.status === 401) {
+        alert('Sessão expirada. Faça login novamente.');
+        handleLogout();
       } else {
         alert('Erro ao salvar post');
       }
@@ -95,13 +95,16 @@ export default function AdminPage() {
     if (!confirm('Tem certeza que deseja excluir este post?')) return;
 
     try {
-      const response = await fetch(`/api/blog/${id}`, {
+      const response = await authenticatedFetch(`/api/blog/${id}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
         alert('Post excluído!');
         loadPosts();
+      } else if (response.status === 401) {
+        alert('Sessão expirada. Faça login novamente.');
+        handleLogout();
       } else {
         alert('Erro ao excluir post');
       }

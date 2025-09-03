@@ -24,12 +24,20 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    // Simular verificação de login
+    // Simular verificação de login com melhor segurança
     setTimeout(() => {
       if (credentials.username === 'waldenrique' && credentials.password === 'rocketai85') {
-        // Salvar sessão no localStorage
+        // Gerar token de autenticação
+        const timestamp = Date.now().toString();
+        const payload = `${credentials.username}:${timestamp}`;
+        const token = btoa(payload);
+        
+        // Salvar sessão com token
         localStorage.setItem('adminAuth', 'true');
         localStorage.setItem('adminUser', credentials.username);
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('loginTime', timestamp);
+        
         router.push('/admin');
       } else {
         setError('Usuário ou senha incorretos');
@@ -140,9 +148,8 @@ export default function LoginPage() {
 
             <div className="mt-6 pt-6 border-t border-slate-800/60">
               <div className="text-center text-sm text-slate-400">
-                <p className="mb-2">Credenciais de teste:</p>
-                <p>Usuário: <span className="text-slate-300 font-mono">waldenrique</span></p>
-                <p>Senha: <span className="text-slate-300 font-mono">rocketai85</span></p>
+                <p>Para acessar o painel administrativo,</p>
+                <p>utilize suas credenciais fornecidas.</p>
               </div>
             </div>
           </CardContent>

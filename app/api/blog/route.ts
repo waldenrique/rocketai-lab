@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPublishedPosts, createPost } from '@/lib/blog.utils';
 import { CreatePostData } from '@/lib/blog.types';
+import { checkAuth, unauthorizedResponse } from '@/lib/auth.utils';
 
 export async function GET() {
   try {
@@ -16,6 +17,11 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  // Verificar autenticação para operações de escrita
+  if (!checkAuth(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const data: CreatePostData = await request.json();
     

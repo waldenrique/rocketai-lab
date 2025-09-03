@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPostBySlug, updatePost, deletePost, getAllPosts } from '@/lib/blog.utils';
 import { CreatePostData } from '@/lib/blog.types';
+import { checkAuth, unauthorizedResponse } from '@/lib/auth.utils';
 
 interface Params {
   id: string;
@@ -43,8 +44,13 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Params }
+  { params }: { params: { id: string } }
 ) {
+  // Verificar autenticação
+  if (!checkAuth(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const { id } = params;
     const data: Partial<CreatePostData> = await request.json();
@@ -72,6 +78,11 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Params }
 ) {
+  // Verificar autenticação
+  if (!checkAuth(request)) {
+    return unauthorizedResponse();
+  }
+
   try {
     const { id } = params;
     

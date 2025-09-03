@@ -15,8 +15,25 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
   useEffect(() => {
     const checkAuth = () => {
       const authStatus = localStorage.getItem('adminAuth');
-      if (authStatus === 'true') {
-        setIsAuthenticated(true);
+      const loginTime = localStorage.getItem('loginTime');
+      const token = localStorage.getItem('authToken');
+      
+      if (authStatus === 'true' && loginTime && token) {
+        // Verificar se o token não expirou (24 horas)
+        const now = Date.now();
+        const tokenTime = parseInt(loginTime);
+        const hoursInMs = 24 * 60 * 60 * 1000;
+        
+        if (now - tokenTime > hoursInMs) {
+          // Token expirado, fazer logout
+          localStorage.removeItem('adminAuth');
+          localStorage.removeItem('adminUser');
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('loginTime');
+          router.push('/login');
+        } else {
+          setIsAuthenticated(true);
+        }
       } else {
         router.push('/login');
       }
