@@ -23,8 +23,8 @@ async function createAdminUser() {
   
   try {
     // 1. Criar usuário de autenticação no Supabase
-    const adminEmail = 'admin@rocketai-lab.com'
-    const temporaryPassword = 'TempAdmin2025!' // Senha temporária que deve ser alterada
+    const adminEmail = 'admin@example.com'
+    const temporaryPassword = 'ChangeMe123!' // Senha temporária que deve ser alterada
     
     const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
       email: adminEmail,
@@ -78,7 +78,7 @@ async function createAdminUser() {
           console.log('\n🎉 USUÁRIO ADMIN CONFIGURADO!')
           console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
           console.log(`📧 Email: ${adminEmail}`)
-          console.log(`🔒 Senha atual: TempAdmin2025!`)
+          console.log(`🔒 Senha atual: ChangeMe123!`)
           console.log('⚠️  IMPORTANTE: Altere a senha após o primeiro login!')
           console.log('🌐 URL Admin: /admin')
           console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n')

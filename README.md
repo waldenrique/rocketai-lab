@@ -42,8 +42,13 @@ Este projeto está otimizado para deploy na Vercel:
 2. Configure as variáveis de ambiente (se necessário)
 3. Deploy automático a cada push
 
-## 📞 Contato
+## � Admin & Segurança
 
-- Email: contato@rocketlab.agency
-- Telefone: +351 9xx xxx xxx
-- Localização: Portugal • Atendimento remoto
+Para configurar o sistema de administração de forma segura:
+
+1. **📖 Leia primeiro**: [ADMIN_SETUP.md](./ADMIN_SETUP.md)
+2. **🔑 Configure**: Use o script `scripts/create-admin.js` (apenas localmente)
+3. **✅ Acesse**: `/admin/login` com suas credenciais
+4. **🔒 Altere**: A senha imediatamente após o primeiro login
+
+**⚠️ IMPORTANTE**: Nunca commite credenciais reais no código!

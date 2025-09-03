@@ -86,7 +86,7 @@ export default function AdminLoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="pl-10 bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                    placeholder="admin@rocketai-lab.com"
+                    placeholder="admin@example.com"
                     required
                   />
                 </div>
@@ -164,10 +164,10 @@ export default function AdminLoginPage() {
           className="mt-6 p-4 bg-gray-800/30 rounded-lg border border-gray-700"
         >
           <h3 className="text-white font-medium mb-2">Credenciais Admin:</h3>
-          <p className="text-gray-300 text-sm">📧 admin@rocketai-lab.com</p>
-          <p className="text-gray-300 text-sm">🔒 TempAdmin2025!</p>
+          <p className="text-gray-300 text-sm">📧 Configure seu email</p>
+          <p className="text-gray-300 text-sm">🔒 Configure sua senha</p>
           <p className="text-yellow-400 text-xs mt-2">
-            ⚠️ Altere a senha após o primeiro login!
+            ⚠️ Use o script create-admin.js para configurar!
           </p>
         </motion.div>
       </motion.div>
