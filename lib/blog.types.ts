@@ -4,7 +4,7 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   content: string;
-  image: string;
+  image?: string;
   author: string;
   publishedAt: string;
   updatedAt: string;
@@ -12,8 +12,8 @@ export interface BlogPost {
   
   // SEO Fields
   seo: {
-    metaTitle: string;
-    metaDescription: string;
+    metaTitle?: string;
+    metaDescription?: string;
     keywords: string[];
     ogTitle?: string;
     ogDescription?: string;
@@ -34,8 +34,8 @@ export interface CreatePostData {
   category: string;
   tags: string[];
   seo: {
-    metaTitle: string;
-    metaDescription: string;
+    metaTitle?: string;
+    metaDescription?: string;
     keywords: string[];
     ogTitle?: string;
     ogDescription?: string;

@@ -13,6 +13,7 @@
 
 import { supabaseAdmin } from './supabase'
 import { BlogPost, CreatePostData } from './blog.types'
+import { Database } from './database.types'
 import { randomUUID } from 'crypto'
 
 // Função para gerar slug a partir do título
@@ -92,27 +93,30 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
       return null
     }
 
+    // Type assertion para corrigir erro de build
+    const post = data as Database['public']['Tables']['posts']['Row']
+
     return {
-      id: data.id,
-      slug: data.slug,
-      title: data.title,
-      excerpt: data.excerpt,
-      content: data.content,
-      image: data.image,
-      author: data.author,
-      publishedAt: data.published_at,
-      updatedAt: data.updated_at,
-      published: data.published,
-      category: data.category,
-      tags: data.tags,
-      readingTime: data.reading_time,
+      id: post.id,
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      content: post.content,
+      image: post.image,
+      author: post.author,
+      publishedAt: post.published_at,
+      updatedAt: post.updated_at,
+      published: post.published,
+      category: post.category,
+      tags: post.tags,
+      readingTime: post.reading_time,
       seo: {
-        metaTitle: data.seo_meta_title,
-        metaDescription: data.seo_meta_description,
-        keywords: data.seo_keywords,
-        ogTitle: data.seo_og_title,
-        ogDescription: data.seo_og_description,
-        ogImage: data.seo_og_image
+        metaTitle: post.seo_meta_title,
+        metaDescription: post.seo_meta_description,
+        keywords: post.seo_keywords,
+        ogTitle: post.seo_og_title,
+        ogDescription: post.seo_og_description,
+        ogImage: post.seo_og_image
       }
     }
   } catch (error) {
@@ -149,7 +153,7 @@ export async function createPost(postData: CreatePostData): Promise<BlogPost | n
 
     const { data, error } = await supabaseAdmin
       .from('posts')
-      .insert(newPost)
+      .insert(newPost as any)
       .select()
       .single()
 
@@ -159,26 +163,26 @@ export async function createPost(postData: CreatePostData): Promise<BlogPost | n
     }
 
     return {
-      id: data.id,
-      slug: data.slug,
-      title: data.title,
-      excerpt: data.excerpt,
-      content: data.content,
-      image: data.image,
-      author: data.author,
-      publishedAt: data.published_at,
-      updatedAt: data.updated_at,
-      published: data.published,
-      category: data.category,
-      tags: data.tags,
-      readingTime: data.reading_time,
+      id: (data as any).id,
+      slug: (data as any).slug,
+      title: (data as any).title,
+      excerpt: (data as any).excerpt,
+      content: (data as any).content,
+      image: (data as any).image,
+      author: (data as any).author,
+      publishedAt: (data as any).published_at,
+      updatedAt: (data as any).updated_at,
+      published: (data as any).published,
+      category: (data as any).category,
+      tags: (data as any).tags,
+      readingTime: (data as any).reading_time,
       seo: {
-        metaTitle: data.seo_meta_title,
-        metaDescription: data.seo_meta_description,
-        keywords: data.seo_keywords,
-        ogTitle: data.seo_og_title,
-        ogDescription: data.seo_og_description,
-        ogImage: data.seo_og_image
+        metaTitle: (data as any).seo_meta_title,
+        metaDescription: (data as any).seo_meta_description,
+        keywords: (data as any).seo_keywords,
+        ogTitle: (data as any).seo_og_title,
+        ogDescription: (data as any).seo_og_description,
+        ogImage: (data as any).seo_og_image
       }
     }
   } catch (error) {
@@ -257,7 +261,7 @@ export async function updatePost(id: string, postData: Partial<CreatePostData>):
 
     const { data, error } = await supabaseAdmin
       .from('posts')
-      .update(updateData)
+      .update(updateData as any)
       .eq('id', id)
       .select()
       .single()
