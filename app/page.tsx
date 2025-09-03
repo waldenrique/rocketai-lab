@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle, CheckCircle2, Star, Zap, Target, TrendingUp, Users, Clock, BarChart3, Globe, Globe2, MessageCircle, Award, Rocket, Bot, Sparkles, ArrowUpRight, Mail, Phone, MapPin, Instagram, Linkedin, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
+import { BlogPost } from '@/lib/blog.types';
 
 /**
  * Rocket Lab Marketing — Landing Page
@@ -91,25 +92,95 @@ const plans = [
   },
 ];
 
-const posts = [
-  {
-    title: "Por que sua empresa precisa de presença digital em 2025",
-    excerpt:
-      "Descubra como uma presença bem estruturada multiplica a autoridade da sua marca e impacta diretamente no faturamento.",
-  },
-  {
-    title: "Automação: o futuro do atendimento ao cliente",
-    excerpt:
-      "Chatbots, fluxos e integrações que reduzem custos e aumentam a satisfação — sem perder o tom humano.",
-  },
-  {
-    title: "Pequenas empresas, grandes resultados online",
-    excerpt:
-      "Como marcas locais estão usando conteúdo e tráfego pago para conquistar mercado.",
-  },
-];
-
 export default function RocketLabLanding() {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    fetchBlogPosts();
+  }, []);
+
+  const fetchBlogPosts = async () => {
+    try {
+      const response = await fetch('/api/blog');
+      const data = await response.json();
+      // Pega apenas os 3 primeiros posts para exibir na homepage
+      setBlogPosts(data.slice(0, 3));
+    } catch (error) {
+      console.error('Erro ao carregar posts:', error);
+      // Fallback para posts estáticos em caso de erro
+      setBlogPosts([
+        {
+          id: 'fallback1',
+          title: "Por que sua empresa precisa de presença digital em 2025",
+          excerpt: "Descubra como uma presença bem estruturada multiplica a autoridade da sua marca e impacta diretamente no faturamento.",
+          slug: "presenca-digital-2025",
+          content: "",
+          image: "",
+          author: "Rocket Lab Marketing",
+          publishedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          published: true,
+          category: "Marketing Digital",
+          tags: [],
+          readingTime: 3,
+          seo: {
+            metaTitle: "",
+            metaDescription: "",
+            keywords: [],
+            ogTitle: "",
+            ogDescription: "",
+            ogImage: ""
+          }
+        },
+        {
+          id: 'fallback2',
+          title: "Automação: o futuro do atendimento ao cliente",
+          excerpt: "Chatbots, fluxos e integrações que reduzem custos e aumentam a satisfação — sem perder o tom humano.",
+          slug: "automacao-atendimento-cliente",
+          content: "",
+          image: "",
+          author: "Rocket Lab Marketing",
+          publishedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          published: true,
+          category: "Automação",
+          tags: [],
+          readingTime: 4,
+          seo: {
+            metaTitle: "",
+            metaDescription: "",
+            keywords: [],
+            ogTitle: "",
+            ogDescription: "",
+            ogImage: ""
+          }
+        },
+        {
+          id: 'fallback3',
+          title: "Pequenas empresas, grandes resultados online",
+          excerpt: "Como marcas locais estão usando conteúdo e tráfego pago para conquistar mercado.",
+          slug: "pequenas-empresas-resultados-online",
+          content: "",
+          image: "",
+          author: "Rocket Lab Marketing",
+          publishedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          published: true,
+          category: "Marketing Digital",
+          tags: [],
+          readingTime: 3,
+          seo: {
+            metaTitle: "",
+            metaDescription: "",
+            keywords: [],
+            ogTitle: "",
+            ogDescription: "",
+            ogImage: ""
+          }
+        }
+      ]);
+    }
+  };
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Header com navegação */}
@@ -349,16 +420,16 @@ export default function RocketLabLanding() {
             <p className="mt-3 text-slate-300">Conteúdos para levar sua marca mais longe.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {posts.map((p) => (
-              <Card key={p.title} className="group border-slate-800/60 bg-slate-900/40">
+            {blogPosts.map((post) => (
+              <Card key={post.id} className="group border-slate-800/60 bg-slate-900/40">
                 <CardHeader>
-                  <CardTitle className="group-hover:text-white transition-colors text-white">{p.title}</CardTitle>
+                  <CardTitle className="group-hover:text-white transition-colors text-white">{post.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-slate-300">{p.excerpt}</p>
-                  <a href="/blog" className="mt-4 inline-flex items-center gap-2 text-sm text-indigo-300 hover:text-indigo-200">
+                  <p className="text-slate-300">{post.excerpt}</p>
+                  <Link href={`/blog/${post.slug}`} className="mt-4 inline-flex items-center gap-2 text-sm text-indigo-300 hover:text-indigo-200">
                     Ler artigo <ArrowRight className="size-4" />
-                  </a>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
