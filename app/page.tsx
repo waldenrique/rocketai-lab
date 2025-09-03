@@ -161,7 +161,7 @@ export default function RocketLabLanding() {
                 </a>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-2xl border-slate-700">
-                <a href="#cases" className="flex items-center gap-2">
+                <a href="#cases" className="flex items-center gap-2 text-black">
                   Ver cases <ArrowUpRight className="size-4" />
                 </a>
               </Button>
@@ -194,7 +194,7 @@ export default function RocketLabLanding() {
       <section id="servicos" className="relative border-t border-slate-800/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">Serviços</h2>
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Serviços</h2>
             <p className="mt-3 text-slate-300">Tudo o que você precisa para sair do chão e crescer.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
@@ -202,7 +202,7 @@ export default function RocketLabLanding() {
               <Card key={s.title} className="border-slate-800/60 bg-slate-900/40">
                 <CardHeader>
                   <div className="mb-2 inline-flex rounded-2xl border border-slate-700 bg-slate-800/60 p-2">{s.icon}</div>
-                  <CardTitle>{s.title}</CardTitle>
+                  <CardTitle className="text-white">{s.title}</CardTitle>
                 </CardHeader>
                 <CardContent className="text-slate-300">
                   <p>{s.desc}</p>
@@ -224,7 +224,7 @@ export default function RocketLabLanding() {
       <section id="processo" className="border-t border-slate-800/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">Como trabalhamos</h2>
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Como trabalhamos</h2>
             <p className="mt-3 text-slate-300">Processo claro, previsível e colaborativo.</p>
           </div>
           <ol className="grid gap-6 md:grid-cols-4">
@@ -250,7 +250,7 @@ export default function RocketLabLanding() {
       <section id="planos" className="border-t border-slate-800/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">Planos</h2>
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Planos</h2>
             <p className="mt-3 text-slate-300">Escolha o melhor combustível para sua jornada.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
@@ -260,7 +260,7 @@ export default function RocketLabLanding() {
                 className={`border-slate-800/60 bg-slate-900/40 ${p.highlighted ? "ring-2 ring-indigo-400" : ""}`}
               >
                 <CardHeader>
-                  <CardTitle className="flex items-baseline justify-between">
+                  <CardTitle className="flex items-baseline justify-between text-white">
                     <span>{p.name}</span>
                     <span className="text-2xl font-bold">{p.price}</span>
                   </CardTitle>
@@ -286,7 +286,7 @@ export default function RocketLabLanding() {
       <section id="cases" className="border-t border-slate-800/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">Resultados</h2>
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Resultados</h2>
             <p className="mt-3 text-slate-300">Alguns números de projetos que amamos.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
@@ -297,7 +297,7 @@ export default function RocketLabLanding() {
             ].map((c) => (
               <Card key={c.label} className="border-slate-800/60 bg-slate-900/40">
                 <CardContent className="p-6">
-                  <div className="text-4xl font-bold">{c.kpi}</div>
+                  <div className="text-4xl font-bold text-white">{c.kpi}</div>
                   <div className="mt-2 text-slate-300">{c.label}</div>
                 </CardContent>
               </Card>
@@ -310,18 +310,18 @@ export default function RocketLabLanding() {
       <section id="blog" className="border-t border-slate-800/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">Do nosso blog</h2>
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Do nosso blog</h2>
             <p className="mt-3 text-slate-300">Conteúdos para levar sua marca mais longe.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {posts.map((p) => (
               <Card key={p.title} className="group border-slate-800/60 bg-slate-900/40">
                 <CardHeader>
-                  <CardTitle className="group-hover:text-white transition-colors">{p.title}</CardTitle>
+                  <CardTitle className="group-hover:text-white transition-colors text-white">{p.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-slate-300">{p.excerpt}</p>
-                  <a href="#" className="mt-4 inline-flex items-center gap-2 text-sm text-indigo-300 hover:text-indigo-200">
+                  <a href="/blog" className="mt-4 inline-flex items-center gap-2 text-sm text-indigo-300 hover:text-indigo-200">
                     Ler artigo <ArrowRight className="size-4" />
                   </a>
                 </CardContent>
@@ -335,7 +335,7 @@ export default function RocketLabLanding() {
       <section id="contato" className="border-t border-slate-800/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl">Vamos conversar</h2>
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Vamos conversar</h2>
             <p className="mt-3 text-slate-300">Conte sobre seu desafio e receba um plano de voo personalizado.</p>
           </div>
 
@@ -387,8 +387,8 @@ export default function RocketLabLanding() {
                   projeto.
                 </p>
                 <div className="space-y-3 text-sm">
-                  <div className="flex items-center gap-2"><Mail className="size-4" /> contato@rocketlab.agency</div>
-                  <div className="flex items-center gap-2"><Phone className="size-4" /> +351 9xx xxx xxx</div>
+                  <div className="flex items-center gap-2"><Mail className="size-4" /> waldenriquept@gmail.com</div>
+                  <div className="flex items-center gap-2"><Phone className="size-4" /> +351 938 392 404</div>
                   <div className="flex items-center gap-2"><MapPin className="size-4" /> Portugal • Atendimento remoto</div>
                 </div>
                 <div className="mt-2 flex gap-3">
