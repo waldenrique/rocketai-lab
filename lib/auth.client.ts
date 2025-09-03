@@ -1,51 +1,90 @@
-// Utilitário para fazer requisições HTTP autenticadas
+import { createBrowserClient } from '@supabase/ssr'
+import { Database } from './database.types'
 
+// Cliente para uso no browser (client-side)
+export const supabase = createBrowserClient<Database>(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+)
+
+// Funções de autenticação seguras
+export const auth = {
+  // Login com email e senha
+  async signIn(email: string, password: string) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+    return { data, error }
+  },
+
+  // Logout
+  async signOut() {
+    const { error } = await supabase.auth.signOut()
+    return { error }
+  },
+
+  // Obter usuário atual
+  async getCurrentUser() {
+    const { data: { user }, error } = await supabase.auth.getUser()
+    return { user, error }
+  },
+
+  // Verificar se é admin
+  async isAdmin() {
+    const { user } = await this.getCurrentUser()
+    if (!user) return false
+    
+    const { data: userData, error } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+      
+    if (error || !userData) return false
+    return (userData as any).role === 'admin'
+  },
+
+  // Alterar senha
+  async updatePassword(newPassword: string) {
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword
+    })
+    return { data, error }
+  },
+
+  // Listener para mudanças de autenticação
+  onAuthStateChange(callback: (event: string, session: any) => void) {
+    return supabase.auth.onAuthStateChange(callback)
+  }
+}
+
+// Função legada para compatibilidade (será removida)
 export async function authenticatedFetch(
   url: string, 
   options: RequestInit = {}
 ): Promise<Response> {
-  const token = localStorage.getItem('authToken');
+  const { data: { session } } = await supabase.auth.getSession()
   
-  if (!token) {
-    throw new Error('Token de autenticação não encontrado');
+  if (!session) {
+    throw new Error('Não autenticado')
   }
   
   const headers = {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`,
+    'Authorization': `Bearer ${session.access_token}`,
     ...options.headers,
-  };
+  }
   
   return fetch(url, {
     ...options,
     headers,
-  });
+  })
 }
 
-// Hook para verificar se está autenticado
-export function isAuthenticated(): boolean {
-  if (typeof window === 'undefined') return false;
-  
-  const authStatus = localStorage.getItem('adminAuth');
-  const loginTime = localStorage.getItem('loginTime');
-  const token = localStorage.getItem('authToken');
-  
-  if (!authStatus || !loginTime || !token) {
-    return false;
-  }
-  
-  // Verificar expiração
-  const now = Date.now();
-  const tokenTime = parseInt(loginTime);
-  const hoursInMs = 24 * 60 * 60 * 1000;
-  
-  return (now - tokenTime) <= hoursInMs;
-}
-
-// Função para logout
+// Função para logout (compatibilidade)
 export function logout(): void {
-  localStorage.removeItem('adminAuth');
-  localStorage.removeItem('adminUser');
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('loginTime');
+  auth.signOut()
 }
+
+export default supabase
