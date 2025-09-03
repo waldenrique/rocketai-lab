@@ -13,11 +13,11 @@ Adicione as seguintes variáveis:
 
 ```bash
 # Autenticação Admin
-ADMIN_USERNAME=waldenrique
-ADMIN_PASSWORD=rocketai85
+ADMIN_USERNAME=seu_usuario
+ADMIN_PASSWORD=sua_senha_segura
 
 # Configurações de Segurança  
-JWT_SECRET=sua_chave_secreta_256_bits_aqui
+JWT_SECRET=sua_chave_secreta_256_bits_aleatoria
 SESSION_DURATION_HOURS=24
 
 # Configurações de API
@@ -28,15 +28,15 @@ NODE_ENV=production
 ### 3. **Como Adicionar Cada Variável:**
 
 1. **Name**: `ADMIN_USERNAME`
-   **Value**: `waldenrique`
+   **Value**: `[seu_usuario]`
    **Environment**: `Production`, `Preview`, `Development`
 
 2. **Name**: `ADMIN_PASSWORD` 
-   **Value**: `rocketai85`
+   **Value**: `[sua_senha_segura]`
    **Environment**: `Production`, `Preview`, `Development`
 
 3. **Name**: `JWT_SECRET`
-   **Value**: `rocket_lab_super_secret_key_2025_256_bits`
+   **Value**: `[chave_256_bits_aleatoria]`
    **Environment**: `Production`, `Preview`, `Development`
 
 4. **Name**: `SESSION_DURATION_HOURS`
