@@ -54,12 +54,22 @@ export default function BlogPage() {
       {/* Header */}
       <header className="border-b border-slate-800/60">
         <div className="mx-auto max-w-7xl px-4 py-6">
-          <Link 
-            href="/" 
-            className="inline-flex items-center gap-2 text-slate-300 hover:text-white mb-6"
-          >
-            ← Voltar ao início
-          </Link>
+          <div className="flex items-center justify-between mb-6">
+            <Link 
+              href="/" 
+              className="inline-flex items-center gap-2 text-slate-300 hover:text-white transition-colors"
+            >
+              ← Voltar ao início
+            </Link>
+            
+            <Link 
+              href="/login" 
+              className="text-slate-400 hover:text-white transition-colors text-sm"
+            >
+              Admin
+            </Link>
+          </div>
+          
           <div className="text-center">
             <h1 className="text-4xl font-bold text-white md:text-5xl">
               Blog da Rocket Lab

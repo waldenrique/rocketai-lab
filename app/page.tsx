@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Rocket, Bot, Globe2, Zap, Sparkles, CheckCircle2, ArrowRight, Mail, Phone, MapPin, ArrowUpRight, Instagram, Linkedin, Facebook } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowRight, CheckCircle, CheckCircle2, Star, Zap, Target, TrendingUp, Users, Clock, BarChart3, Globe, Globe2, MessageCircle, Award, Rocket, Bot, Sparkles, ArrowUpRight, Mail, Phone, MapPin, Instagram, Linkedin, Facebook } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import Link from 'next/link';
 
 /**
  * Rocket Lab Marketing — Landing Page
@@ -111,6 +112,40 @@ const posts = [
 export default function RocketLabLanding() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
+      {/* Header com navegação */}
+      <header className="border-b border-slate-800/60">
+        <div className="mx-auto max-w-7xl px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-8">
+              <h1 className="text-xl font-bold text-white">Rocket Lab</h1>
+              <nav className="flex items-center gap-6">
+                <a href="#inicio" className="text-slate-300 hover:text-white transition-colors">
+                  Início
+                </a>
+                <a href="#servicos" className="text-slate-300 hover:text-white transition-colors">
+                  Serviços
+                </a>
+                <a href="#cases" className="text-slate-300 hover:text-white transition-colors">
+                  Cases
+                </a>
+                <Link href="/blog" className="text-slate-300 hover:text-white transition-colors">
+                  Blog
+                </Link>
+                <a href="#contato" className="text-slate-300 hover:text-white transition-colors">
+                  Contato
+                </a>
+              </nav>
+            </div>
+            
+            <Link 
+              href="/login" 
+              className="text-slate-400 hover:text-white transition-colors text-sm"
+            >
+              Admin
+            </Link>
+          </div>
+        </div>
+      </header>
       <StarsBg />
 
       {/* Header */}
@@ -137,7 +172,7 @@ export default function RocketLabLanding() {
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section id="inicio" className="relative overflow-hidden">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 md:grid-cols-2">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

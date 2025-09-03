@@ -84,13 +84,29 @@ export default function BlogPostPage() {
       {/* Header */}
       <header className="border-b border-slate-800/60">
         <div className="mx-auto max-w-4xl px-4 py-6">
-          <Link 
-            href="/blog" 
-            className="inline-flex items-center gap-2 text-slate-300 hover:text-white mb-6"
-          >
-            <ArrowLeft className="size-4" />
-            Voltar ao blog
-          </Link>
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <Link 
+                href="/" 
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+              >
+                ← Início
+              </Link>
+              <Link 
+                href="/blog" 
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+              >
+                ← Blog
+              </Link>
+            </div>
+            
+            <Link 
+              href="/login" 
+              className="text-slate-400 hover:text-white transition-colors text-sm"
+            >
+              Admin
+            </Link>
+          </div>
         </div>
       </header>
 

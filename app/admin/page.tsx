@@ -2,19 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Save, Upload, Eye, ArrowLeft, Plus, Edit, Trash2 } from 'lucide-react';
+import { Save, Upload, Eye, ArrowLeft, Plus, Edit, Trash2, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { BlogPost, CreatePostData } from '@/lib/blog.types';
+import AuthWrapper from '@/components/AuthWrapper';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function AdminPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState('');
+  const router = useRouter();
   const [formData, setFormData] = useState<CreatePostData>({
     title: '',
     excerpt: '',
@@ -33,7 +37,18 @@ export default function AdminPage() {
 
   useEffect(() => {
     loadPosts();
+    // Buscar usuário logado
+    const user = localStorage.getItem('adminUser');
+    if (user) {
+      setCurrentUser(user);
+    }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('adminAuth');
+    localStorage.removeItem('adminUser');
+    router.push('/');
+  };
 
   const loadPosts = async () => {
     try {
@@ -131,21 +146,38 @@ export default function AdminPage() {
 
   if (isCreating || editingPost) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 py-8">
-        <div className="mx-auto max-w-4xl px-4">
-          <div className="flex items-center gap-4 mb-8">
-            <Button
-              onClick={resetForm}
-              variant="outline"
-              className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white"
-            >
-              <ArrowLeft className="size-4 mr-2" />
-              Voltar
-            </Button>
-            <h1 className="text-3xl font-bold text-white">
-              {editingPost ? 'Editar Post' : 'Criar Novo Post'}
-            </h1>
-          </div>
+      <AuthWrapper>
+        <div className="min-h-screen bg-slate-950 text-slate-100 py-8">
+          <div className="mx-auto max-w-4xl px-4">
+            <div className="flex items-center gap-4 mb-8">
+              <Button
+                onClick={resetForm}
+                variant="outline"
+                className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white"
+              >
+                <ArrowLeft className="size-4 mr-2" />
+                Voltar
+              </Button>
+              <h1 className="text-3xl font-bold text-white">
+                {editingPost ? 'Editar Post' : 'Criar Novo Post'}
+              </h1>
+              
+              <div className="ml-auto flex items-center gap-4">
+                <div className="flex items-center gap-2 text-slate-300">
+                  <User className="size-4" />
+                  <span>{currentUser}</span>
+                </div>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  size="sm"
+                  className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white"
+                >
+                  <LogOut className="size-4 mr-2" />
+                  Sair
+                </Button>
+              </div>
+            </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Informações Básicas */}
@@ -316,21 +348,59 @@ export default function AdminPage() {
           </form>
         </div>
       </div>
+      </AuthWrapper>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-8">
-      <div className="mx-auto max-w-6xl px-4">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">
-              Painel Administrativo
-            </h1>
-            <p className="text-slate-300">
-              Gerencie os posts do seu blog
-            </p>
+    <AuthWrapper>
+      <div className="min-h-screen bg-slate-950 text-slate-100 py-8">
+        <div className="mx-auto max-w-6xl px-4">
+          {/* Header com navegação e usuário */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
+              <Link 
+                href="/" 
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+              >
+                <ArrowLeft className="size-4" />
+                Início
+              </Link>
+              <Link 
+                href="/blog" 
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+              >
+                <Eye className="size-4" />
+                Ver Blog
+              </Link>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-slate-300">
+                <User className="size-4" />
+                <span>Olá, {currentUser}</span>
+              </div>
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                size="sm"
+                className="border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white"
+              >
+                <LogOut className="size-4 mr-2" />
+                Sair
+              </Button>
+            </div>
           </div>
+
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">
+                Painel Administrativo
+              </h1>
+              <p className="text-slate-300">
+                Gerencie os posts do seu blog
+              </p>
+            </div>
           
           <div className="flex gap-4">
             <Button
@@ -428,5 +498,6 @@ export default function AdminPage() {
         </div>
       </div>
     </div>
+    </AuthWrapper>
   );
 }
