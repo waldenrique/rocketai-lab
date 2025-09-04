@@ -178,20 +178,7 @@ export default function LoginPage() {
           </CardContent>
         </Card>
 
-        {/* Informações de desenvolvimento */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-6 p-4 bg-slate-800/30 rounded-lg border border-slate-700"
-        >
-          <h3 className="text-white font-medium mb-2">Credenciais Admin:</h3>
-          <p className="text-slate-300 text-sm">📧 waldenriquept@gmail.com</p>
-          <p className="text-slate-300 text-sm">🔒 rocketai85</p>
-          <p className="text-yellow-400 text-xs mt-2">
-            ⚠️ Altere a senha após o primeiro login!
-          </p>
-        </motion.div>
+        {/* Sistema seguro - credenciais não expostas */}
       </motion.div>
     </div>
   );

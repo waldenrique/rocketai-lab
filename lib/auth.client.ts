@@ -32,17 +32,24 @@ export const auth = {
 
   // Verificar se é admin
   async isAdmin() {
-    const { user } = await this.getCurrentUser()
-    if (!user) return false
+    console.log('🔍 Verificando se é admin...');
     
-    const { data: userData, error } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-      
-    if (error || !userData) return false
-    return (userData as any).role === 'admin'
+    const { user } = await this.getCurrentUser()
+    console.log('👤 Usuário atual:', user?.id, user?.email);
+    
+    if (!user) {
+      console.log('❌ Nenhum usuário logado');
+      return false;
+    }
+    
+    // Verificar role nos metadados do usuário (mais seguro e direto)
+    const role = user.user_metadata?.role;
+    console.log('👑 Role nos metadados:', role);
+    
+    const isAdminUser = role === 'admin';
+    console.log('✅ É admin?', isAdminUser);
+    
+    return isAdminUser;
   },
 
   // Alterar senha
