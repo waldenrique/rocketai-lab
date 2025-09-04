@@ -3,17 +3,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Lock, User, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ArrowLeft, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { auth } from '@/lib/auth.client';
 import Link from 'next/link';
 
 export default function LoginPage() {
-  const [credentials, setCredentials] = useState({
-    username: '',
-    password: ''
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -24,33 +24,40 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
+    console.log('🔐 Tentando login...', { email, password: '***' });
+
     try {
-      // Fazer requisição para API de autenticação
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Salvar sessão com token retornado pela API
-        localStorage.setItem('adminAuth', 'true');
-        localStorage.setItem('adminUser', credentials.username);
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('loginTime', data.loginTime);
-        
-        router.push('/admin');
-      } else {
-        setError(data.error || 'Erro ao fazer login');
+      const { data, error: signInError } = await auth.signIn(email, password);
+      
+      console.log('📊 Resultado do signIn:', { data: !!data, error: signInError?.message });
+      
+      if (signInError) {
+        console.error('❌ Erro de signIn:', signInError);
+        setError(`Erro de login: ${signInError.message}`);
+        setLoading(false);
+        return;
       }
+
+      console.log('✅ Login realizado, verificando admin...');
+      
+      // Verificar se é admin
+      const isAdmin = await auth.isAdmin();
+      console.log('👑 É admin?', isAdmin);
+      
+      if (!isAdmin) {
+        setError('Acesso negado. Apenas administradores podem acessar.');
+        await auth.signOut();
+        setLoading(false);
+        return;
+      }
+
+      console.log('🚀 Redirecionando para admin...');
+      // Sucesso - redirecionar para admin seguro
+      router.push('/admin/secure');
+      
     } catch (error) {
-      console.error('Erro no login:', error);
-      setError('Erro de conexão');
-    } finally {
+      console.error('❌ Erro no login:', error);
+      setError(`Erro interno: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
       setLoading(false);
     }
   };
@@ -92,45 +99,46 @@ export default function LoginPage() {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-6">
               {error && (
-                <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
-                  {error}
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="flex items-center space-x-2 p-3 bg-red-900/50 border border-red-700 rounded-md"
+                >
+                  <AlertCircle className="h-4 w-4 text-red-400" />
+                  <span className="text-red-400 text-sm">{error}</span>
+                </motion.div>
               )}
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
-                    Usuário
-                  </label>
+                  <Label htmlFor="email" className="text-slate-300">
+                    Email
+                  </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 size-4 text-slate-400" />
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     <Input
-                      type="text"
-                      value={credentials.username}
-                      onChange={(e) => setCredentials({
-                        ...credentials,
-                        username: e.target.value
-                      })}
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="pl-10 bg-slate-950 border-slate-800 text-white placeholder:text-slate-500"
-                      placeholder="Digite seu usuário"
+                      placeholder="Digite seu email"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                  <Label htmlFor="password" className="text-slate-300">
                     Senha
-                  </label>
+                  </Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 size-4 text-slate-400" />
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                     <Input
+                      id="password"
                       type={showPassword ? 'text' : 'password'}
-                      value={credentials.password}
-                      onChange={(e) => setCredentials({
-                        ...credentials,
-                        password: e.target.value
-                      })}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="pl-10 pr-10 bg-slate-950 border-slate-800 text-white placeholder:text-slate-500"
                       placeholder="Digite sua senha"
                       required
@@ -138,7 +146,7 @@ export default function LoginPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                      className="absolute right-3 top-3 text-slate-400 hover:text-white transition-colors"
                     >
                       {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                     </button>
@@ -148,21 +156,42 @@ export default function LoginPage() {
 
               <Button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !email || !password}
                 className="w-full bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:from-indigo-600 hover:to-fuchsia-600 text-white font-medium py-3"
               >
-                {loading ? 'Entrando...' : 'Entrar'}
+                {loading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>Entrando...</span>
+                  </div>
+                ) : (
+                  'Entrar'
+                )}
               </Button>
             </form>
 
-            <div className="mt-6 pt-6 border-t border-slate-800/60">
-              <div className="text-center text-sm text-slate-400">
-                <p>Para acessar o painel administrativo,</p>
-                <p>utilize suas credenciais fornecidas.</p>
-              </div>
+            <div className="mt-6 text-center">
+              <p className="text-slate-400 text-sm">
+                Sistema de autenticação seguro via Supabase
+              </p>
             </div>
           </CardContent>
         </Card>
+
+        {/* Informações de desenvolvimento */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-6 p-4 bg-slate-800/30 rounded-lg border border-slate-700"
+        >
+          <h3 className="text-white font-medium mb-2">Credenciais Admin:</h3>
+          <p className="text-slate-300 text-sm">📧 waldenriquept@gmail.com</p>
+          <p className="text-slate-300 text-sm">🔒 rocketai85</p>
+          <p className="text-yellow-400 text-xs mt-2">
+            ⚠️ Altere a senha após o primeiro login!
+          </p>
+        </motion.div>
       </motion.div>
     </div>
   );

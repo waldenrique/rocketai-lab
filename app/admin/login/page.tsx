@@ -23,17 +23,26 @@ export default function AdminLoginPage() {
     setLoading(true);
     setError('');
 
+    console.log('🔐 Tentando login...', { email, password: '***' });
+
     try {
       const { data, error: signInError } = await auth.signIn(email, password);
       
+      console.log('📊 Resultado do signIn:', { data: !!data, error: signInError?.message });
+      
       if (signInError) {
-        setError('Email ou senha incorretos');
+        console.error('❌ Erro de signIn:', signInError);
+        setError(`Erro de login: ${signInError.message}`);
         setLoading(false);
         return;
       }
 
+      console.log('✅ Login realizado, verificando admin...');
+      
       // Verificar se é admin
       const isAdmin = await auth.isAdmin();
+      console.log('👑 É admin?', isAdmin);
+      
       if (!isAdmin) {
         setError('Acesso negado. Apenas administradores podem acessar.');
         await auth.signOut();
@@ -41,12 +50,13 @@ export default function AdminLoginPage() {
         return;
       }
 
-      // Sucesso - redirecionar para admin
-      router.push('/admin');
+      console.log('🚀 Redirecionando para admin...');
+      // Sucesso - redirecionar para admin seguro
+      router.push('/admin/secure');
       
     } catch (error) {
-      console.error('Erro no login:', error);
-      setError('Erro interno. Tente novamente.');
+      console.error('❌ Erro no login:', error);
+      setError(`Erro interno: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
       setLoading(false);
     }
   };
