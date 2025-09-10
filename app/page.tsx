@@ -13,13 +13,14 @@ import Link from 'next/link';
  * Rocket Lab Marketing — Landing Page
  * Stack: React + Tailwind + shadcn/ui + framer-motion + lucide-react
  * Pronto para Vercel. Use como app/page.tsx ou src/app/page.tsx (Next.js).
- * Idioma: PT-BR
+ * Idioma: PT-PT (Português de Portugal)
+ * Versão em inglês disponível em breve
+ * Técnicas de SEO aplicadas para pesquisas e indexação por robôs do Google
  */
 
 const nav = [
   { label: "Serviços", href: "#servicos" },
   { label: "Processo", href: "#processo" },
-  { label: "Planos", href: "#planos" },
   { label: "Cases", href: "#cases" },
   { label: "Blog", href: "#blog" },
   { label: "Contato", href: "#contato" },
@@ -27,67 +28,34 @@ const nav = [
 
 const services = [
   {
-    icon: <Rocket className="size-6" aria-hidden />,
-    title: "Gestão de Redes Sociais",
-    desc: "Planejamento, calendário editorial, criação e tráfego pago para crescer com consistência.",
-    bullets: ["Identidade visual consistente", "Conteúdo que converte", "Relatórios mensais"],
+    icon: <Bot className="size-6" aria-hidden />,
+    title: "Automações Inteligentes com n8n",
+    desc: "Automatize tarefas, integrações e fluxos de trabalho para ganhar eficiência e escalar seu negócio.",
+    bullets: [
+      "Robôs e fluxos personalizados",
+      "Integração entre sistemas e APIs",
+      "Redução de retrabalho e erros",
+    ],
   },
   {
     icon: <Globe2 className="size-6" aria-hidden />,
-    title: "Sites & Sistemas Web",
-    desc: "Landing pages, sites institucionais e pequenos sistemas sob medida para o seu negócio.",
-    bullets: ["Next.js + SEO", "Performance e acessibilidade", "Integrações e automações"],
-  },
-  {
-    icon: <Bot className="size-6" aria-hidden />,
-    title: "Automações Inteligentes",
-    desc: "Chatbots, funis, integrações com n8n e automações que escalam o atendimento.",
-    bullets: ["Captação 24/7", "Qualificação de leads", "Menos retrabalho"],
-  },
-];
-
-const plans = [
-  {
-    name: "Launch",
-    price: "€399",
-    tagline: "Para começar com o pé direito",
-    features: [
-      "Gestão de 1 rede social",
-      "8 posts/mês + 8 stories",
-      "Calendário editorial",
-      "Relatório mensal simples",
+    title: "Sistemas Web & SaaS",
+    desc: "Desenvolvimento de sistemas web, SaaS e softwares sob medida para empresas inovadoras.",
+    bullets: [
+      "Soluções personalizadas",
+      "Painéis, dashboards e automação",
+      "Escalabilidade e segurança",
     ],
-    cta: "Quero decolar",
-    highlighted: false,
   },
   {
-    name: "Orbit",
-    price: "€799",
-    tagline: "Foco em crescimento consistente",
-    features: [
-      "Gestão de 2 redes sociais",
-      "16 posts/mês + 16 stories",
-      "2 campanhas de tráfego",
-      "Landing page otimizada",
-      "Relatório de performance",
+    icon: <Rocket className="size-6" aria-hidden />,
+    title: "Consultoria e Integrações",
+    desc: "Ajudamos a conectar ferramentas, criar automações e transformar processos digitais.",
+    bullets: [
+      "Mapeamento de processos",
+      "Consultoria em automação",
+      "Integração de plataformas",
     ],
-    cta: "Entrar em órbita",
-    highlighted: true,
-  },
-  {
-    name: "Galaxy",
-    price: "€1499",
-    tagline: "Para escalar com automação",
-    features: [
-      "Gestão de 3+ redes sociais",
-      "Conteúdo multimídia (vídeo/reels)",
-      "4 campanhas de tráfego",
-      "Automação com chatbot",
-      "SEO + Blog (2 posts/mês)",
-      "Relatórios avançados",
-    ],
-    cta: "Dominar a galáxia",
-    highlighted: false,
   },
 ];
 
@@ -112,43 +80,8 @@ const posts = [
 export default function RocketLabLanding() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      {/* Header com navegação */}
-      <header className="border-b border-slate-800/60">
-        <div className="mx-auto max-w-7xl px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <h1 className="text-xl font-bold text-white">Rocket Lab</h1>
-              <nav className="flex items-center gap-6">
-                <a href="#inicio" className="text-slate-300 hover:text-white transition-colors">
-                  Início
-                </a>
-                <a href="#servicos" className="text-slate-300 hover:text-white transition-colors">
-                  Serviços
-                </a>
-                <a href="#cases" className="text-slate-300 hover:text-white transition-colors">
-                  Cases
-                </a>
-                <Link href="/blog" className="text-slate-300 hover:text-white transition-colors">
-                  Blog
-                </Link>
-                <a href="#contato" className="text-slate-300 hover:text-white transition-colors">
-                  Contato
-                </a>
-              </nav>
-            </div>
-            
-            <Link 
-              href="/login" 
-              className="text-slate-400 hover:text-white transition-colors text-sm"
-            >
-              Admin
-            </Link>
-          </div>
-        </div>
-      </header>
       <StarsBg />
-
-      {/* Header */}
+      {/* Header principal fixo */}
       <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-slate-950/60 border-b border-slate-800/50">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <a href="#" className="flex items-center gap-2">
@@ -186,15 +119,9 @@ export default function RocketLabLanding() {
               Impulsionamos sua marca ao <span className="bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-amber-300 bg-clip-text text-transparent">espaço digital</span>
             </h1>
             <p className="mt-5 max-w-xl text-slate-300">
-              Gestão de redes sociais, criação de sites e automações inteligentes para empresas que querem escalar com
-              previsibilidade.
+              Especialistas em automações inteligentes com n8n, criação de sistemas web, SaaS e softwares personalizados para empresas que querem escalar com tecnologia. Atendemos Portugal, Porto, Braga e Vila Nova de Famalicão.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="rounded-2xl">
-                <a href="#planos" className="flex items-center gap-2">
-                  Ver planos <ArrowRight className="size-4" />
-                </a>
-              </Button>
               <Button asChild size="lg" variant="outline" className="rounded-2xl border-slate-700">
                 <a href="#cases" className="flex items-center gap-2 text-black">
                   Ver cases <ArrowUpRight className="size-4" />
@@ -281,87 +208,35 @@ export default function RocketLabLanding() {
         </div>
       </section>
 
-      {/* Planos */}
-      <section id="planos" className="border-t border-slate-800/60 py-16">
+      {/* Portfólio */}
+      <section id="portfolio" className="border-t border-slate-800/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl text-white">Planos</h2>
-            <p className="mt-3 text-slate-300">Escolha o melhor combustível para sua jornada.</p>
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Portfólio</h2>
+            <p className="mt-3 text-slate-300">Alguns projetos desenvolvidos sob medida.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {plans.map((p) => (
-              <Card
-                key={p.name}
-                className={`border-slate-800/60 bg-slate-900/40 ${p.highlighted ? "ring-2 ring-indigo-400" : ""}`}
-              >
-                <CardHeader>
-                  <CardTitle className="flex items-baseline justify-between text-white">
-                    <span>{p.name}</span>
-                    <span className="text-2xl font-bold">{p.price}</span>
-                  </CardTitle>
-                  <p className="text-slate-300">{p.tagline}</p>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 text-sm text-slate-300">
-                    {p.features.map((f) => (
-                      <li key={f} className="flex items-center gap-2">
-                        <CheckCircle2 className="size-4" /> {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className="mt-5 w-full rounded-2xl">{p.cta}</Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Cases (mock) */}
-      <section id="cases" className="border-t border-slate-800/60 py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl text-white">Resultados</h2>
-            <p className="mt-3 text-slate-300">Alguns números de projetos que amamos.</p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              { kpi: "+220%", label: "Alcance em 90 dias" },
-              { kpi: "-35%", label: "Custo por lead" },
-              { kpi: "3.1x", label: "Retorno sobre investimento" },
-            ].map((c) => (
-              <Card key={c.label} className="border-slate-800/60 bg-slate-900/40">
-                <CardContent className="p-6">
-                  <div className="text-4xl font-bold text-white">{c.kpi}</div>
-                  <div className="mt-2 text-slate-300">{c.label}</div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Blog (teaser) */}
-      <section id="blog" className="border-t border-slate-800/60 py-16">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl text-white">Do nosso blog</h2>
-            <p className="mt-3 text-slate-300">Conteúdos para levar sua marca mais longe.</p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {posts.map((p) => (
-              <Card key={p.title} className="group border-slate-800/60 bg-slate-900/40">
-                <CardHeader>
-                  <CardTitle className="group-hover:text-white transition-colors text-white">{p.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-slate-300">{p.excerpt}</p>
-                  <a href="/blog" className="mt-4 inline-flex items-center gap-2 text-sm text-indigo-300 hover:text-indigo-200">
-                    Ler artigo <ArrowRight className="size-4" />
-                  </a>
-                </CardContent>
-              </Card>
-            ))}
+            <a href="https://cv.3d-rocket.pt/" target="_blank" rel="noopener" className="block rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden hover:scale-[1.02] transition">
+              <img src="/cv.png" alt="CV 3D Rocket" className="w-full h-40 object-cover" />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-white">CV 3D Rocket</h3>
+                <p className="mt-2 text-sm text-slate-300">Gere currículos com IA em minutos.</p>
+              </div>
+            </a>
+            <a href="https://post.waldenrique.com.br/" target="_blank" rel="noopener" className="block rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden hover:scale-[1.02] transition">
+              <img src="/post.png" alt="Post Waldenrique" className="w-full h-40 object-cover" />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-white">Post Waldenrique</h3>
+                <p className="mt-2 text-sm text-slate-300">Sistema de postagem e automação para marketing digital.</p>
+              </div>
+            </a>
+            <a href="https://3d-rocket.pt/" target="_blank" rel="noopener" className="block rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden hover:scale-[1.02] transition">
+              <img src="/3drocket.png" alt="3D Rocket" className="w-full h-40 object-cover" />
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-white">3D Rocket</h3>
+                <p className="mt-2 text-sm text-slate-300">Site institucional para agência de tecnologia e automação.</p>
+              </div>
+            </a>
           </div>
         </div>
       </section>
@@ -370,32 +245,27 @@ export default function RocketLabLanding() {
       <section id="contato" className="border-t border-slate-800/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mx-auto mb-10 max-w-2xl text-center">
-            <h2 className="text-3xl font-bold md:text-4xl text-white">Vamos conversar</h2>
-            <p className="mt-3 text-slate-300">Conte sobre seu desafio e receba um plano de voo personalizado.</p>
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Contato</h2>
+            <p className="mt-3 text-slate-300">Vamos conversar sobre como podemos ajudar sua empresa a crescer.</p>
           </div>
-
           <div className="grid gap-6 md:grid-cols-2">
             <Card className="border-slate-800/60 bg-slate-900/40">
-              <CardContent className="p-6">
-                <form
-                  action="https://formspree.io/f/xpwjyvnd"
-                  method="POST"
-                  className="space-y-4"
-                >
+              <CardContent>
+                <form className="grid gap-4">
                   <div>
                     <label className="mb-1 block text-sm">Nome</label>
                     <Input
                       name="name"
-                      placeholder="Seu nome"
+                      placeholder="Seu nome completo"
                       className="bg-slate-950 border-slate-800"
                       required
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm">Email</label>
+                    <label className="mb-1 block text-sm">E-mail</label>
                     <Input
-                      type="email"
                       name="email"
+                      type="email"
                       placeholder="seu@email.com"
                       className="bg-slate-950 border-slate-800"
                       required
@@ -424,7 +294,7 @@ export default function RocketLabLanding() {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center gap-2"><Mail className="size-4" /> waldenriquept@gmail.com</div>
                   <div className="flex items-center gap-2"><Phone className="size-4" /> +351 938 392 404</div>
-                  <div className="flex items-center gap-2"><MapPin className="size-4" /> Portugal • Atendimento remoto</div>
+                  <div className="flex items-center gap-2"><MapPin className="size-4" /> Portugal • Porto • Braga • Vila Nova de Famalicão • Atendimento remoto</div>
                 </div>
                 <div className="mt-2 flex gap-3">
                   <a href="#" aria-label="Instagram" className="rounded-xl border border-slate-700 bg-slate-800/60 p-2 hover:bg-slate-800">
@@ -439,6 +309,29 @@ export default function RocketLabLanding() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Blog (teaser) */}
+      <section id="blog" className="border-t border-slate-800/60 py-16">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="mx-auto mb-10 max-w-2xl text-center">
+            <h2 className="text-3xl font-bold md:text-4xl text-white">Do nosso blog</h2>
+            <p className="mt-3 text-slate-300">Dicas, novidades e insights para impulsionar seu negócio.</p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {posts.map((post) => (
+              <div key={post.title} className="rounded-2xl border border-slate-800 bg-slate-900/40 p-6">
+                <h3 className="text-lg font-semibold text-white">{post.title}</h3>
+                <p className="mt-2 text-sm text-slate-300">{post.excerpt}</p>
+                <Button asChild className="mt-4 rounded-2xl">
+                  <a href="#" className="text-sm">
+                    Ler mais
+                  </a>
+                </Button>
+              </div>
+            ))}
           </div>
         </div>
       </section>
