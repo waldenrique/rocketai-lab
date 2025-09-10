@@ -22,7 +22,7 @@ import { pushToDataLayer } from '../utils/gtm';
 const nav = [
   { label: "Serviços", href: "#servicos" },
   { label: "Processo", href: "#processo" },
-  { label: "Cases", href: "#cases" },
+  { label: "Portfólio", href: "#portfolio" },
   { label: "Blog", href: "#blog" },
   { label: "Contato", href: "#contato" },
 ];
@@ -124,8 +124,8 @@ export default function RocketLabLanding() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild size="lg" variant="outline" className="rounded-2xl border-slate-700">
-                <a href="#cases" className="flex items-center gap-2 text-black">
-                  Ver cases <ArrowUpRight className="size-4" />
+                <a href="#portfolio" className="flex items-center gap-2 text-black">
+                  Ver portfólio <ArrowUpRight className="size-4" />
                 </a>
               </Button>
             </div>
@@ -239,6 +239,13 @@ export default function RocketLabLanding() {
               </div>
             </a>
           </div>
+          <div className="mt-8 text-center">
+            <Button asChild variant="outline" className="rounded-2xl border-slate-700 text-black hover:text-black">
+              <Link href="/portfolio" className="flex items-center justify-center gap-2">
+                Ver portfólio completo <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -252,17 +259,32 @@ export default function RocketLabLanding() {
           <div className="grid gap-6 md:grid-cols-2">
             <Card className="border-slate-800/60 bg-slate-900/40">
               <CardContent>
-                <form className="grid gap-4" onSubmit={e => {
-                  pushToDataLayer('form_submit', {
-                    categoria: 'Contato',
-                    rotulo: 'Formulário Landing',
-                  });
-                }}>
+                <form
+                  className="grid gap-4"
+                  action="https://formspree.io/f/xpwjyvnd"
+                  method="POST"
+                  onSubmit={e => {
+                    pushToDataLayer('form_submit', {
+                      categoria: 'Contato',
+                      rotulo: 'Formulário Landing',
+                    });
+                  }}
+                >
                   <div>
                     <label className="mb-1 block text-sm">Nome</label>
                     <Input
                       name="name"
                       placeholder="Seu nome completo"
+                      className="bg-slate-950 border-slate-800"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-sm">Email</label>
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="seu@email.com"
                       className="bg-slate-950 border-slate-800"
                       required
                     />
@@ -369,6 +391,56 @@ export default function RocketLabLanding() {
       </svg>
       WhatsApp
     </a>
+
+    {/* Schema.org Structured Data */}
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Rocket Lab Marketing",
+          "description": "Gestão de redes sociais, criação de sites e automações inteligentes para empresas que querem escalar com previsibilidade.",
+          "url": "https://ai.3d-rocket.pt",
+          "logo": "https://ai.3d-rocket.pt/3drocket.png",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+351938392404",
+            "contactType": "customer service",
+            "email": "waldenriquept@gmail.com",
+            "availableLanguage": "Portuguese"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "PT",
+            "addressRegion": "Porto",
+            "addressLocality": "Vila Nova de Famalicão"
+          },
+          "sameAs": [
+            "https://www.instagram.com/rocketlabmarketing",
+            "https://www.linkedin.com/company/rocketlabmarketing",
+            "https://www.facebook.com/rocketlabmarketing"
+          ],
+          "service": [
+            {
+              "@type": "Service",
+              "name": "Gestão de Redes Sociais",
+              "description": "Gestão completa de redes sociais com estratégia, conteúdo e análise de resultados."
+            },
+            {
+              "@type": "Service",
+              "name": "Automações Inteligentes",
+              "description": "Automações com n8n para otimizar processos e aumentar eficiência."
+            },
+            {
+              "@type": "Service",
+              "name": "Criação de Sites",
+              "description": "Desenvolvimento de sites e sistemas web personalizados."
+            }
+          ]
+        })
+      }}
+    />
   </div>
   );
 }
