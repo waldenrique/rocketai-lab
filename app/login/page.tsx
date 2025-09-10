@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Lock, User, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { pushToDataLayer } from '../../utils/gtm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
@@ -90,7 +91,13 @@ export default function LoginPage() {
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={handleLogin} className="space-y-6">
+            <form onSubmit={e => {
+              pushToDataLayer('login_submit', {
+                categoria: 'Login',
+                rotulo: 'Formulário Login',
+              });
+              handleLogin(e);
+            }} className="space-y-6">
               {error && (
                 <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
                   {error}

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import Link from 'next/link';
+import { pushToDataLayer } from '../utils/gtm';
 
 /**
  * Rocket Lab Marketing — Landing Page
@@ -251,22 +252,17 @@ export default function RocketLabLanding() {
           <div className="grid gap-6 md:grid-cols-2">
             <Card className="border-slate-800/60 bg-slate-900/40">
               <CardContent>
-                <form className="grid gap-4">
+                <form className="grid gap-4" onSubmit={e => {
+                  pushToDataLayer('form_submit', {
+                    categoria: 'Contato',
+                    rotulo: 'Formulário Landing',
+                  });
+                }}>
                   <div>
                     <label className="mb-1 block text-sm">Nome</label>
                     <Input
                       name="name"
                       placeholder="Seu nome completo"
-                      className="bg-slate-950 border-slate-800"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-1 block text-sm">E-mail</label>
-                    <Input
-                      name="email"
-                      type="email"
-                      placeholder="seu@email.com"
                       className="bg-slate-950 border-slate-800"
                       required
                     />
@@ -281,6 +277,13 @@ export default function RocketLabLanding() {
                     />
                   </div>
                   <Button type="submit" className="rounded-2xl">Enviar mensagem</Button>
+                  {/* Exemplo: Adicione pushToDataLayer em botões importantes */}
+                  {/*
+                  <Button onClick={() => pushToDataLayer('whatsapp_click', {
+                    categoria: 'Contato',
+                    rotulo: 'Botão WhatsApp',
+                  })}>WhatsApp</Button>
+                  */}
                 </form>
               </CardContent>
             </Card>
